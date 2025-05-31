@@ -24,12 +24,12 @@ pkg update -y && pkg upgrade -y
 
 ### 2️⃣ Tải xuống script đào XMR
 ```bash
-git clone https://github.com/d4m-dev/XmrigV2.git && cd XmrigV2 && chmod +x xmrig.sh
+git clone https://github.com/d4m-dev/XmrigV2.git
 ```
 
 ### 3️⃣ Chạy script và thiết lập cấu hình
 ```bash
-./xmrig.sh
+./xmrig.sh && cd XmrigV2 && chmod +x xmrig.sh
 ```
 Lần đầu chạy, bạn cần nhập:
 - Địa chỉ ví Monero (XMR)

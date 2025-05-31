@@ -86,5 +86,41 @@ termux-reload-settings
 > ❗ **Quan trọng:** Script này chỉ mang tính giáo dục. Hãy tuân thủ pháp luật và chính sách dịch vụ của bạn khi sử dụng.
 
 ---
+#
+## 🔧 Sửa lỗi thường gặp
+
+### 1. Lỗi thiếu package
+```bash
+pkg update && pkg install -y git clang cmake
+```
+
+### 2. Lỗi biên dịch
+```bash
+cd ~/xmrig
+rm -rf build
+mkdir build && cd build
+cmake -DWITH_HWLOC=OFF ..
+make -j4
+```
+
+### 3. Lỗi kết nối pool
+Kiểm tra pool:
+```bash
+ping xmr.hashvault.pro
+```
+
+Thay đổi pool trong config:
+```bash
+nano ~/.xmr_miner_config
+# Đổi thành: POOL="xmr.2miners.com:2222"
+```
+
+## 📊 Theo dõi hiệu suất
+```bash
+watch -n 5 "pgrep -l xmrig; sensors"
+```
+
+> ⚠️ **Lưu ý**: Đảm bảo thiết bị không quá nóng!
+```
 
 **Nguồn:** [d4m-dev/XmrigV2 trên GitHub](https://github.com/d4m-dev/XmrigV2/)

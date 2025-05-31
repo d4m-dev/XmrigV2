@@ -24,8 +24,7 @@ pkg update -y && pkg upgrade -y
 
 ### 2️⃣ Tải xuống script đào XMR
 ```bash
-curl -L https://raw.githubusercontent.com/your-repo/xmrig-termux/main/xmrig.sh -o xmrig.sh
-chmod +x xmrig.sh
+git clone https://github.com/d4m-dev/XmrigV2.git && cd XmrigV2 && chmod +x xmrig.sh
 ```
 
 ### 3️⃣ Chạy script và thiết lập cấu hình

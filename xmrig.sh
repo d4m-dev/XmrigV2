@@ -37,19 +37,19 @@ check_internet() {
 install_xmrig() {
   echo -e "${YELLOW}[*] Đang cài đặt XMRig...${NC}"
   if [ -d "$HOME/xmrig" ]; then
-    echo -e "${BLUE}[*] Đã phát hiện thư mục XMRig tồn tại, cập nhật...${NC}"
+    echo -e "${BLUE}[*] Đã phát hiện thư mục XMRig, cập nhật...${NC}"
     cd "$HOME/xmrig"
     git pull
   else
     git clone https://github.com/xmrig/xmrig.git "$HOME/xmrig"
     cd "$HOME/xmrig"
   fi
-  
+
   mkdir -p build
   cd build
   cmake -DWITH_HWLOC=OFF ..
   make -j$(nproc)
-  
+
   if [ -f "./xmrig" ]; then
     echo -e "${GREEN}[✓] XMRig đã được cài đặt thành công!${NC}"
   else
@@ -63,57 +63,52 @@ setup_config() {
   echo -e "${CYAN}╔═══════════════════════════════════════════════╗${NC}"
   echo -e "${CYAN}║          THIẾT LẬP CẤU HÌNH ĐÀO XMR           ║${NC}"
   echo -e "${CYAN}╚═══════════════════════════════════════════════╝${NC}"
-  
-  # Đọc giá trị cũ hoặc sử dụng giá trị mặc định
-  if [ -f "$CONFIG_FILE" ]; then
-    source "$CONFIG_FILE"
-  fi
-  
+
+  [ -f "$CONFIG_FILE" ] && source "$CONFIG_FILE"
+
   read -p "Nhập địa chỉ ví XMR (hiện tại: ${WALLET:-Chưa thiết lập}): " new_wallet
   read -p "Nhập tên worker (hiện tại: ${WORKER:-Chưa thiết lập}): " new_worker
   read -p "Nhập số luồng CPU (0-$DEFAULT_THREADS, hiện tại: ${THREADS:-$DEFAULT_THREADS}): " new_threads
   read -p "Tự động chạy khi mở Termux? (yes/no, hiện tại: ${AUTOSTART:-$DEFAULT_AUTOSTART}): " new_autostart
-  
-  # Validate input
+
   WALLET=${new_wallet:-$WALLET}
   WORKER=${new_worker:-$WORKER}
   THREADS=${new_threads:-$THREADS}
   AUTOSTART=${new_autostart:-$AUTOSTART}
-  
-  # Validate threads
+
   if [[ ! $THREADS =~ ^[0-9]+$ ]] || [ "$THREADS" -gt "$DEFAULT_THREADS" ] || [ "$THREADS" -eq 0 ]; then
     THREADS=$DEFAULT_THREADS
-    echo -e "${YELLOW}[!] Số luồng không hợp lệ, sử dụng mặc định: $THREADS${NC}"
+    echo -e "${YELLOW}[!] Số luồng không hợp lệ, dùng mặc định: $THREADS${NC}"
   fi
-  
+
   # Lưu cấu hình
-  echo "WALLET=\"$WALLET\"" > "$CONFIG_FILE"
-  echo "WORKER=\"$WORKER\"" >> "$CONFIG_FILE"
-  echo "THREADS=\"$THREADS\"" >> "$CONFIG_FILE"
-  echo "AUTOSTART=\"$AUTOSTART\"" >> "$CONFIG_FILE"
-  echo "POOL=\"$DEFAULT_POOL\"" >> "$CONFIG_FILE"
-  echo "ALGO=\"$DEFAULT_ALGO\"" >> "$CONFIG_FILE"
-  
-  echo -e "${GREEN}[✓] Cấu hình đã được lưu tại $CONFIG_FILE${NC}"
-  
-  # Thiết lập autostart
+  cat <<EOF > "$CONFIG_FILE"
+WALLET="$WALLET"
+WORKER="$WORKER"
+THREADS="$THREADS"
+AUTOSTART="$AUTOSTART"
+POOL="$DEFAULT_POOL"
+ALGO="$DEFAULT_ALGO"
+EOF
+
+  echo -e "${GREEN}[✓] Đã lưu cấu hình tại $CONFIG_FILE${NC}"
+
   setup_autostart
 }
 
-# Thiết lập tự động chạy khi mở Termux (sửa đúng cách)
+# Thiết lập tự chạy bằng .bashrc
 setup_autostart() {
   AUTOSTART_CMD="bash $0 --mining"
-  BASHRC_FILE="$HOME/.bashrc"
 
   if [ "$AUTOSTART" = "yes" ]; then
-    echo -e "${YELLOW}[*] Thiết lập tự động chạy khi mở Termux...${NC}"
-    if ! grep -Fxq "$AUTOSTART_CMD" "$BASHRC_FILE"; then
-      echo "$AUTOSTART_CMD" >> "$BASHRC_FILE"
+    if ! grep -Fxq "$AUTOSTART_CMD" "$HOME/.bashrc"; then
+      echo "$AUTOSTART_CMD" >> "$HOME/.bashrc"
+      echo -e "${GREEN}[✓] Đã bật chế độ tự động chạy khi mở Termux.${NC}"
+    else
+      echo -e "${BLUE}[*] Tự động chạy đã được bật từ trước.${NC}"
     fi
-    echo -e "${GREEN}[✓] Đã bật chế độ tự động chạy.${NC}"
   else
-    # Xóa dòng tự động chạy nếu có
-    sed -i "\|$AUTOSTART_CMD|d" "$BASHRC_FILE"
+    sed -i "\|$AUTOSTART_CMD|d" "$HOME/.bashrc"
     echo -e "${BLUE}[*] Đã tắt chế độ tự động chạy.${NC}"
   fi
 }
@@ -164,27 +159,6 @@ start_mining() {
   done
 }
 
-  echo -e "${GREEN}[✓] Mạng OK. Bắt đầu đào...${NC}"
-  echo -e "${CYAN}╔═══════════════════════════════════════════════╗${NC}"
-  echo -e "${CYAN}║ THÔNG TIN MINER                               ║${NC}"
-  echo -e "${CYAN}╠═══════════════════════════════════════════════╣${NC}"
-  echo -e "${CYAN}║ Ví: $WALLET${NC}"
-  echo -e "${CYAN}║ Worker: $WORKER${NC}"
-  echo -e "${CYAN}║ Pool: $POOL${NC}"
-  echo -e "${CYAN}║ Luồng CPU: $THREADS/${DEFAULT_THREADS}${NC}"
-  echo -e "${CYAN}╚═══════════════════════════════════════════════╝${NC}"
-  sleep 2
-  
-  cd "$HOME/xmrig/build" || { echo -e "${RED}[X] Không tìm thấy thư mục XMRig!${NC}"; install_xmrig; }
-  
-  while true; do
-    echo -e "${BLUE}==> Đang chạy XMRig...${NC}"
-    ./xmrig -o "$POOL" -a "$ALGO" -u "$WALLET" -p "$WORKER" -t "$THREADS"
-    echo -e "${RED}[!] XMRig dừng. Khởi động lại sau 10s...${NC}"
-    sleep 10
-  done
-}
-
 # Xử lý tham số dòng lệnh
 if [ "$1" == "--mining" ]; then
   start_mining
@@ -204,7 +178,7 @@ while true; do
   case $choice in
     1) start_mining ;;
     2) setup_config ;;
-    3) install_xmrig ;;
+    3) install_dependencies; install_xmrig ;;
     0) echo -e "${YELLOW}Tạm biệt!${NC}"; exit 0 ;;
     *) echo -e "${RED}Lựa chọn không hợp lệ.${NC}" ;;
   esac

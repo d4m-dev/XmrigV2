@@ -86,6 +86,8 @@ termux-reload-settings
 > ❗ **Quan trọng:** Script này chỉ mang tính giáo dục. Hãy tuân thủ pháp luật và chính sách dịch vụ của bạn khi sử dụng.
 
 ---
+**Nguồn:** [d4m-dev/XmrigV2 trên GitHub](https://github.com/d4m-dev/XmrigV2/)
+---
 #
 ## 🔧 Sửa lỗi thường gặp
 
@@ -112,8 +114,8 @@ ping xmr.hashvault.pro
 Thay đổi pool trong config:
 ```bash
 nano ~/.xmr_miner_config
-# Đổi thành: POOL="xmr.2miners.com:2222"
 ```
+# Đổi thành: POOL="xmr.2miners.com:2222"
 
 ## 📊 Theo dõi hiệu suất
 ```bash
@@ -122,5 +124,3 @@ watch -n 5 "pgrep -l xmrig; sensors"
 
 > ⚠️ **Lưu ý**: Đảm bảo thiết bị không quá nóng!
 ```
-
-**Nguồn:** [d4m-dev/XmrigV2 trên GitHub](https://github.com/d4m-dev/XmrigV2/)

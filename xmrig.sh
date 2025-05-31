@@ -120,31 +120,49 @@ setup_autostart() {
 
 # Bắt đầu đào
 start_mining() {
-  # Kiểm tra cấu hình
   if [ ! -f "$CONFIG_FILE" ]; then
-    echo -e "${RED}[X] Chưa thiết lập cấu hình! Vui lòng chạy thiết lập trước.${NC}"
+    echo -e "${RED}[X] Chưa thiết lập cấu hình!${NC}"
     sleep 2
     setup_config
     return
   fi
-  
+
   source "$CONFIG_FILE"
-  
+
   if [ -z "$WALLET" ] || [ -z "$WORKER" ]; then
-    echo -e "${RED}[X] Địa chỉ ví hoặc tên worker chưa được thiết lập!${NC}"
+    echo -e "${RED}[X] Thiếu ví hoặc worker!${NC}"
     sleep 2
     setup_config
     return
   fi
-  
+
   echo -e "${YELLOW}[*] Kiểm tra kết nối mạng...${NC}"
   attempts=0; max_attempts=10
   while ! check_internet; do
     echo -e "${RED}[!] Không có mạng. Thử lại sau 10s...${NC}"
     attempts=$((attempts + 1))
-    if [ "$attempts" -ge "$max_attempts" ]; then echo -e "${RED}[X] Thoát.${NC}"; return; fi
+    [ "$attempts" -ge "$max_attempts" ] && echo -e "${RED}[X] Thoát.${NC}" && return
     sleep 10
   done
+
+  echo -e "${GREEN}[✓] Mạng OK. Bắt đầu đào...${NC}"
+  echo -e "${CYAN}╔═══════════════════════════════════════════════╗${NC}"
+  echo -e "${CYAN}║ THÔNG TIN MINER                               ║${NC}"
+  echo -e "${CYAN}║ Ví: $WALLET${NC}"
+  echo -e "${CYAN}║ Worker: $WORKER${NC}"
+  echo -e "${CYAN}║ Pool: $POOL${NC}"
+  echo -e "${CYAN}║ Luồng CPU: $THREADS/${DEFAULT_THREADS}${NC}"
+  echo -e "${CYAN}╚═══════════════════════════════════════════════╝${NC}"
+  sleep 2
+
+  while true; do
+    echo -e "${BLUE}==> Đang chạy XMRig...${NC}"
+    cd "$HOME/xmrig/build" || { echo -e "${RED}[X] Không tìm thấy thư mục XMRig!${NC}"; install_xmrig; continue; }
+    ./xmrig -o "$POOL" -a "$ALGO" -u "$WALLET" -p "$WORKER" -t "$THREADS"
+    echo -e "${RED}[!] XMRig dừng. Restart sau 10s...${NC}"
+    sleep 10
+  done
+}
 
   echo -e "${GREEN}[✓] Mạng OK. Bắt đầu đào...${NC}"
   echo -e "${CYAN}╔═══════════════════════════════════════════════╗${NC}"

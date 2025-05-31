@@ -87,6 +87,7 @@ termux-reload-settings
 
 ---
 **Nguồn:** [d4m-dev/XmrigV2 trên GitHub](https://github.com/d4m-dev/XmrigV2/)
+
 ---
 #
 ## 🔧 Sửa lỗi thường gặp
@@ -115,7 +116,7 @@ Thay đổi pool trong config:
 ```bash
 nano ~/.xmr_miner_config
 ```
-# Đổi thành: POOL="xmr.2miners.com:2222"
+#### Đổi thành: POOL="xmr.2miners.com:2222"
 
 ## 📊 Theo dõi hiệu suất
 ```bash

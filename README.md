@@ -29,7 +29,7 @@ git clone https://github.com/d4m-dev/XmrigV2.git
 
 ### 3️⃣ Chạy script và thiết lập cấu hình
 ```bash
-./xmrig.sh && cd XmrigV2 && chmod +x xmrig.sh
+cd XmrigV2 && chmod +x xmrig.sh && ./xmrig.sh
 ```
 Lần đầu chạy, bạn cần nhập:
 - Địa chỉ ví Monero (XMR)

@@ -22,7 +22,7 @@ show_banner() {
   neofetch
   echo -e "${CYAN}"
   echo "╔═══════════════════════════════════════════════╗"
-  echo "║       SCRIPT ĐÀO XMR TỰ ĐỘNG - TERMUX                 ║"
+  echo "║       SCRIPT ĐÀO XMR TỰ ĐỘNG - TERMUX         ║"
   echo "╚═══════════════════════════════════════════════╝"
   echo -e "${NC}"
 }
@@ -61,7 +61,7 @@ install_xmrig() {
 # Thiết lập cấu hình
 setup_config() {
   echo -e "${CYAN}╔═══════════════════════════════════════════════╗${NC}"
-  echo -e "${CYAN}║          THIẾT LẬP CẤU HÌNH ĐÀO XMR                   ║${NC}"
+  echo -e "${CYAN}║          THIẾT LẬP CẤU HÌNH ĐÀO XMR           ║${NC}"
   echo -e "${CYAN}╚═══════════════════════════════════════════════╝${NC}"
   
   # Đọc giá trị cũ hoặc sử dụng giá trị mặc định
@@ -145,7 +145,7 @@ start_mining() {
 
   echo -e "${GREEN}[✓] Mạng OK. Bắt đầu đào...${NC}"
   echo -e "${CYAN}╔═══════════════════════════════════════════════╗${NC}"
-  echo -e "${CYAN}║ THÔNG TIN MINER                                       ║${NC}"
+  echo -e "${CYAN}║ THÔNG TIN MINER                               ║${NC}"
   echo -e "${CYAN}╠═══════════════════════════════════════════════╣${NC}"
   echo -e "${CYAN}║ Ví: $WALLET${NC}"
   echo -e "${CYAN}║ Worker: $WORKER${NC}"

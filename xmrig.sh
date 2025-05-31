@@ -100,17 +100,20 @@ setup_config() {
   setup_autostart
 }
 
-# Thiết lập tự động chạy
+# Thiết lập tự động chạy khi mở Termux (sửa đúng cách)
 setup_autostart() {
+  AUTOSTART_CMD="bash $0 --mining"
+  BASHRC_FILE="$HOME/.bashrc"
+
   if [ "$AUTOSTART" = "yes" ]; then
     echo -e "${YELLOW}[*] Thiết lập tự động chạy khi mở Termux...${NC}"
-    mkdir -p "$HOME/.termux"
-    echo "bash $0 --mining" > "$HOME/.termux/termux.properties"
-    termux-reload-settings
+    if ! grep -Fxq "$AUTOSTART_CMD" "$BASHRC_FILE"; then
+      echo "$AUTOSTART_CMD" >> "$BASHRC_FILE"
+    fi
     echo -e "${GREEN}[✓] Đã bật chế độ tự động chạy.${NC}"
   else
-    rm -f "$HOME/.termux/termux.properties"
-    termux-reload-settings
+    # Xóa dòng tự động chạy nếu có
+    sed -i "\|$AUTOSTART_CMD|d" "$BASHRC_FILE"
     echo -e "${BLUE}[*] Đã tắt chế độ tự động chạy.${NC}"
   fi
 }

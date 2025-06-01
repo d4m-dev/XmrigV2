@@ -45,7 +45,10 @@ Chọn "1. Bắt đầu đào" từ menu hoặc chạy trực tiếp:
 
 ## ⚙️ Cấu hình nâng cao
 
-Cấu hình được lưu tại `~/.xmr_miner_config`. Bạn có thể sửa trực tiếp hoặc dùng menu script.
+Cấu hình được lưu tại `~/.xmr_miner_config`. Bạn có thể sửa trực tiếp hoặc dùng menu script:
+```bash
+nano ~/.xmr_miner_config
+```
 
 Ví dụ nội dung:
 ```bash

@@ -1,5 +1,6 @@
 # XMRig Auto Miner cho Termux
 
+<img src="./img/screen_shot_v2.jpg" alt="XMRig Miner Screenshot" style="max-width: 100%; border-radius: 5px; margin: 20px 0;">
 Một script tự động hóa quá trình đào Monero (XMR) trên Android sử dụng Termux với các tính năng:
 - ✅ Tự động cài đặt XMRig và các phụ thuộc
 - 🔄 Tự động khởi động lại khi bị dừng

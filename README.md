@@ -29,7 +29,7 @@ pkg install wget && wget https://raw.githubusercontent.com/d4m-dev/XmrigV2/main/
 
 ### 3️⃣ Chạy script và thiết lập cấu hình
 ```bash
-cd XmrigV2 && chmod +x xmrig.sh && ./xmrig.sh
+chmod +x xmrig.sh && ./xmrig.sh
 ```
 Lần đầu chạy, bạn cần nhập:
 - Địa chỉ ví Monero (XMR)
